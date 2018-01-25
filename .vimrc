@@ -44,15 +44,16 @@ set showmatch		" Show matching brackets.
 "set incsearch		" Incremental search
 "set autowrite		" Automatically save before commands like :next and :make
 "set hidden		" Hide buffers when they are abandoned
-"set mouse=a		" Enable mouse usage (all modes)
+"set mouse=a " Enable mouse usage (all modes)
 set number
 set autoindent
 set smartindent
 set tabstop=4
-set shiftwidth=2
+set shiftwidth=4
 set nobackup
 set nowritebackup
 set noswapfile
+set pastetoggle=<F9>
 "set textwidth=79
 "split navigation
 let mapleader="\<space>"
@@ -67,19 +68,18 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <Leader>sv :source $MYVIMRC<cr>
-nnoremap <C-U> <esc>gUll
+nnoremap U <esc>gUll
 nnoremap qq :q!<CR>
 nnoremap wq :wq<CR>
-nnoremap <Leader>y "+y
+nnoremap <Leader>y "+y"*y
 nnoremap <Leader>p "+p
-nnoremap <Leader>yy "+y 
+nnoremap <Leader>yy "+yy
+nnoremap <CR> G
+nnoremap H 0
+nnoremap L $
 "Insert no reverse map
-inoremap jk <esc>
-inoremap <C-J> <Down>
-inoremap <C-K> <Up>
-"inoremap <C-H> <Left>
-inoremap <C-L> <Right>
-inoremap <C-U> <esc>gUlli
+map jk <esc>
+
 "Insert abbreviations
 "Tab
 map <Leader>tn :tabnew<CR>
