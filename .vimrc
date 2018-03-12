@@ -46,6 +46,7 @@ set showmatch		" Show matching brackets.
 "set hidden		" Hide buffers when they are abandoned
 "set mouse=a " Enable mouse usage (all modes)
 set number
+set nocompatible
 set autoindent
 set smartindent
 set tabstop=4
@@ -56,7 +57,6 @@ set noswapfile
 set pastetoggle=<F9>
 "set textwidth=79
 "split navigation
-let mapleader="\<space>"
 "Normal no reverse map
 nnoremap <Left> <Nop>
 nnoremap <Right> <Nop>
@@ -66,19 +66,15 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <Leader>sv :source $MYVIMRC<cr>
 nnoremap U <esc>gUll
-nnoremap qq :q!<CR>
-nnoremap wq :wq<CR>
-nnoremap <Leader>y "+y"*y
-nnoremap <Leader>p "+p
-nnoremap <Leader>yy "+yy
 nnoremap <CR> G
 nnoremap H 0
 nnoremap L $
+nnoremap <space> :
 "Insert no reverse map
-map jk <esc>
+"imap <Tab> <esc>
+"inoremap <C-H> <Left>
+"vmap <Tab> <esc>
 
 "Insert abbreviations
 "Tab
@@ -100,6 +96,7 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'junegunn/fzf.vim'
+Plugin 'mileszs/ack.vim'
 call vundle#end()
 filetype plugin indent on
 "Powerline
@@ -118,8 +115,19 @@ let NERDTreeShowBookmarks=1
 "Set ignore
 let NERDTreeIgnore=['\~$', '\.pyc$', '\.swp$']
 "Set nerdtree window size
-let NERDTreeWinSize=25
+let NERDTreeWinSize=40
+"Find current file path
+map <F3> :NERDTreeFind<CR>
+"Set window right
+let NERDTreeWinPos=1
+"auto open NERDTree
+"autocmd vimenter * NERDTree
 "NERDTree END
+
+"Ack START
+let g:ackprg = 'ag --nogroup --nocolor --column'
+"Ack END
+
 
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
