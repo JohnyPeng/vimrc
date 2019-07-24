@@ -21,7 +21,8 @@ if has("syntax")
 endif
 " If using a dark background within the editing area and syntax highlighting
 " turn on this option as well
-"set background=dark
+set background=dark
+syntax enable
 
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
@@ -58,8 +59,8 @@ set noswapfile
 set pastetoggle=<F9>
 set laststatus=2
 set hlsearch
-set incsearch
 set mouse=n
+set tabpagemax=99
 "set clipboard=unnamed
 "set textwidth=79
 "split navigation
@@ -78,7 +79,9 @@ nnoremap H 0
 nnoremap L $
 nnoremap <space>y "+
 nnoremap <leader>wq :wq<CR>
-nnoremap <C-Z> :w<CR><C-Z>
+nnoremap <C-Z> :wa<CR><C-Z>
+"nnoremap <C-T> :LeaderfFile<CR>
+nnoremap <C-T> :FZF<CR>
 "nnoremap yy yy"+yy
 "nnoremap yw yw"+yw
 "nnoremap dd dd"+dd
@@ -89,8 +92,20 @@ nnoremap <C-Z> :w<CR><C-Z>
 "imap <Tab> <esc>
 "inoremap <C-H> <Left>
 "vmap <Tab> <esc>
+iabbrev xend <!--TINNO END-->
+iabbrev xtinno <!--TINNO BEGIN--><cr><!--JIRA:--><cr><!--AUTHOR:jonny.peng@tinno.com--><ESC>kba
+iabbrev jtinno //TINNO BEGIN<cr>JIRA:<cr>AUTHOR:jonny.peng@tinno.com<ESC>kA
+iabbrev stinno #TINNO BEGIN<cr>#JIRA:<cr>#AUTHOR:jonny.peng@tinno.com<ESC>kA
+iabbrev syso System.out.println("");<ESC>2hi
+iabbrev logd Log.d(TAG, "");<Left><Left><Left>
+iabbrev logi Log.i(TAG, "");<ESC>2hi
+iabbrev consti public static final int
+iabbrev constS public static final String
+iabbrev docj /**<cr><cr>/<ESC>kA
 
+"Don't use <space> as leader, otherwise cause ui lags in response
 let mapleader=";"
+
 nnoremap <leader>1 1gt
 nnoremap <leader>2 2gt
 nnoremap <leader>3 3gt
@@ -100,18 +115,26 @@ nnoremap <leader>6 6gt
 nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
-nnoremap <leader>"" viw<esc>a"<esc>hbi"<esc>lel"
+nnoremap <leader>ts :tabs<cr>
+nnoremap <leader>tl :tablast<cr>
+nnoremap "" viw<esc>a"<esc>hbi"<esc>lel"
+nnoremap `` viw<esc>a`<esc>hbi`<esc>lel"
+
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>yy "+yy
 nnoremap <leader>dd "+dd
 nnoremap <leader>dw "+dw
 nnoremap <leader>yw "+yw
-nnoremap <leader>v <c-v>
-nnoremap <leader>a :Ack!<space>
+"nnoremap <leader>v <c-v>
+nnoremap <leader>a :Ag<space>
+nnoremap <leader>s :lv /<c-r>=expand("<cword>")<cr>/ %<cr>:lw<cr>
 
 "Insert abbreviations
 inoremap <C-J> <esc>
+
+syntax on
+"colorscheme 
 
 "Vundle plugin
 filetype off
@@ -119,29 +142,22 @@ set rtp+=~/.vim/bundle/Vundle.vim
 set rtp+=~/.fzf
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Lokaltog/vim-powerline'
 Plugin 'scrooloose/nerdtree'
-"The vertical line for indent
 Plugin 'Yggdroot/indentLine'
 Plugin 'jiangmiao/auto-pairs'
-"For write pep8 style in python
 Plugin 'tell-k/vim-autopep8'
-"Search file
 Plugin 'junegunn/fzf.vim'
-"Search text
+Plugin 'Yggdroot/LeaderF'
 Plugin 'mileszs/ack.vim'
-"Collection of colorschemes
-Plugin 'flazz/vim-colorschemes'
-"plantuml syntax, plant uml is a tool for draw uml
 Plugin 'aklt/plantuml-syntax'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 call vundle#end()
 filetype plugin indent on
-"Powerline
-let g:Powerline_symbols = 'fancy'
-
+let g:airline_theme='onedark'
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#formatter='unique_tail'
 "FZF START
-nnoremap <C-T> :FZF<CR>
-inoremap <C-T>t <esc>:FZF<CR>
 "FZF END
 "NERDTree START
 "F2 ON/OFF tree"
@@ -160,10 +176,6 @@ let NERDTreeWinPos=0
 "auto open NERDTree
 "autocmd vimenter * NERDTree
 "NERDTree END
-
-colorscheme onedark
-syntax enable
-syntax on
 
 "Ack START
 let g:ackprg = 'ag --nogroup --nocolor --column'
