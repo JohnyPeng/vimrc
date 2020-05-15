@@ -73,6 +73,7 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+nnoremap <C-N> *
 " Lower case to Upper case
 nnoremap U <esc>gUll
 nnoremap H 0
@@ -82,6 +83,7 @@ nnoremap <leader>wq :wq<CR>
 nnoremap <C-Z> :wa<CR><C-Z>
 "nnoremap <C-T> :LeaderfFile<CR>
 nnoremap <C-T> :FZF<CR>
+nnoremap <C-B> :Buffers<CR>
 "nnoremap yy yy"+yy
 "nnoremap yw yw"+yw
 "nnoremap dd dd"+dd
@@ -92,16 +94,22 @@ nnoremap <C-T> :FZF<CR>
 "imap <Tab> <esc>
 "inoremap <C-H> <Left>
 "vmap <Tab> <esc>
-iabbrev xend <!--TINNO END-->
+iabbrev xend <!--TINNO END--><ESC>
 iabbrev xtinno <!--TINNO BEGIN--><cr><!--JIRA:--><cr><!--AUTHOR:jonny.peng@tinno.com--><ESC>kba
 iabbrev jtinno //TINNO BEGIN<cr>JIRA:<cr>AUTHOR:jonny.peng@tinno.com<ESC>kA
+iabbrev jctinno /**<cr>JIRA:<cr>FUNC:<cr>AUTHOR:jonny.peng@tinno.com<cr>/<ESC>3kA
 iabbrev stinno #TINNO BEGIN<cr>#JIRA:<cr>#AUTHOR:jonny.peng@tinno.com<ESC>kA
 iabbrev syso System.out.println("");<ESC>2hi
-iabbrev logd Log.d(TAG, "");<Left><Left><Left>
-iabbrev logi Log.i(TAG, "");<ESC>2hi
+iabbrev logd Log.d(TAG, "");<ESC>3h
+iabbrev logi Log.i(TAG, "");<ESC>3h
+iabbrev logj android.util.Log.d("jonny", "");<ESC>3h
+iabbrev logtrace Log.d(TAG, "Log stack trace>>" + Log.getStackTraceString(new Throwable()));<ESC>
 iabbrev consti public static final int
+iabbrev constf public static final float
+iabbrev constd public static final double
 iabbrev constS public static final String
 iabbrev docj /**<cr><cr>/<ESC>kA
+iabbrev fori for(int i = 0; i < ; i++)<ESC>5h
 
 "Don't use <space> as leader, otherwise cause ui lags in response
 let mapleader=";"
@@ -122,7 +130,6 @@ nnoremap `` viw<esc>a`<esc>hbi`<esc>lel"
 
 nnoremap <leader>q :q!<cr>
 nnoremap <leader>w :w<cr>
-nnoremap <leader>yy "+yy
 nnoremap <leader>dd "+dd
 nnoremap <leader>dw "+dw
 nnoremap <leader>yw "+yw
@@ -134,7 +141,7 @@ nnoremap <leader>s :lv /<c-r>=expand("<cword>")<cr>/ %<cr>:lw<cr>
 inoremap <C-J> <esc>
 
 syntax on
-"colorscheme 
+"colorscheme onedark
 
 "Vundle plugin
 filetype off
@@ -152,6 +159,11 @@ Plugin 'mileszs/ack.vim'
 Plugin 'aklt/plantuml-syntax'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'dart-lang/dart-vim-plugin'
+Plugin 'thosakwe/vim-flutter'
+Plugin 'mattn/emmet-vim'
 call vundle#end()
 filetype plugin indent on
 let g:airline_theme='onedark'
@@ -176,6 +188,11 @@ let NERDTreeWinPos=0
 "auto open NERDTree
 "autocmd vimenter * NERDTree
 "NERDTree END
+
+let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_conceal=0
+let g:vim_markdown_conceal_code_blocks=0
 
 "Ack START
 let g:ackprg = 'ag --nogroup --nocolor --column'
