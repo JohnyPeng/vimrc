@@ -96,14 +96,15 @@ nnoremap <C-B> :Buffers<CR>
 "vmap <Tab> <esc>
 iabbrev xend <!--TINNO END--><ESC>
 iabbrev xtinno <!--TINNO BEGIN--><cr><!--JIRA:--><cr><!--AUTHOR:jonny.peng@tinno.com--><ESC>kba
-iabbrev jtinno //TINNO BEGIN<cr>JIRA:<cr>AUTHOR:jonny.peng@tinno.com<ESC>kA
+iabbrev jtinno //TINNO BEGIN<cr>JIRA:<cr>AUTHOR:jonny.peng@tinno.com<cr>DESC:<ESC>2kA
 iabbrev jctinno /**<cr>JIRA:<cr>FUNC:<cr>AUTHOR:jonny.peng@tinno.com<cr>/<ESC>3kA
-iabbrev stinno #TINNO BEGIN<cr>#JIRA:<cr>#AUTHOR:jonny.peng@tinno.com<ESC>kA
+iabbrev stinno #TINNO BEGIN<cr>#JIRA:<cr>#AUTHOR:jonny.peng@tinno.com<cr>#DESC:<ESC>2kA
 iabbrev syso System.out.println("");<ESC>2hi
 iabbrev logd Log.d(TAG, "");<ESC>3h
 iabbrev logi Log.i(TAG, "");<ESC>3h
-iabbrev logj android.util.Log.d("jonny", "");<ESC>3h
-iabbrev logtrace Log.d(TAG, "Log stack trace>>" + Log.getStackTraceString(new Throwable()));<ESC>
+iabbrev logj Log.d("jonny", "");<ESC>3h
+iabbrev slogd Log.d(TAG, "", new Throwable());<ESC>
+iabbrev slogj Slog.d("jonny", "");<ESC>3h
 iabbrev consti public static final int
 iabbrev constf public static final float
 iabbrev constd public static final double
@@ -137,6 +138,7 @@ nnoremap <leader>yw "+yw
 nnoremap <leader>a :Ag<space>
 nnoremap <leader>s :lv /<c-r>=expand("<cword>")<cr>/ %<cr>:lw<cr>
 
+vnoremap y "+y
 "Insert abbreviations
 inoremap <C-J> <esc>
 
@@ -145,30 +147,51 @@ syntax on
 
 "Vundle plugin
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=~/.fzf
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Yggdroot/indentLine'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'tell-k/vim-autopep8'
-Plugin 'junegunn/fzf.vim'
-Plugin 'Yggdroot/LeaderF'
-Plugin 'mileszs/ack.vim'
-Plugin 'aklt/plantuml-syntax'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'dart-lang/dart-vim-plugin'
-Plugin 'thosakwe/vim-flutter'
-Plugin 'mattn/emmet-vim'
-call vundle#end()
+call plug#begin('~/.vim/plugged')
+
+Plug 'scrooloose/nerdtree'
+Plug 'Yggdroot/indentLine'
+Plug 'jiangmiao/auto-pairs'
+Plug 'tell-k/vim-autopep8'
+Plug 'Yggdroot/LeaderF'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'mileszs/ack.vim'
+Plug 'aklt/plantuml-syntax'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+Plug 'mattn/emmet-vim'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
+Plug 'skywind3000/vim-preview'
+call plug#end()
 filetype plugin indent on
 let g:airline_theme='onedark'
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#formatter='unique_tail'
+
+
+" gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+
+" 所生成的数据文件的名称
+let g:gutentags_ctags_tagfile = '.tags'
+
+" 同时开启 ctags 和 gtags 支持：
+let g:gutentags_modules = []
+if executable('ctags')
+	let g:gutentags_modules += ['ctags']
+endif
+if executable('gtags-cscope') && executable('gtags')
+	let g:gutentags_modules += ['gtags_cscope']
+endif
+
+" 将自动生成的 ctags/gtags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+
 "FZF START
 "FZF END
 "NERDTree START
@@ -197,6 +220,16 @@ let g:vim_markdown_conceal_code_blocks=0
 "Ack START
 let g:ackprg = 'ag --nogroup --nocolor --column'
 "Ack END
+
+"Get current file path to clip board
+function GetCurFilePath()
+    let cur_dir=getcwd()
+    let cur_file_name=getreg('%')
+    let dir_filename=cur_dir."/".cur_file_name
+    echo dir_filename."         done"
+    call setreg('+',dir_filename)
+endfunction
+nnoremap <silent> <F9> : call GetCurFilePath()<cr>
 
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
